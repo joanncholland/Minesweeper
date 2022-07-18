@@ -46,6 +46,11 @@ public class Location {
         this.column = column;
     }
 
+    /**
+     * Overrides the equals method to evaluate whether one Location object equals another Location object.
+     * @param obj The Location object to be compared.
+     * @return A boolean value indicating whether the two Location objects are equal.
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Location) {
