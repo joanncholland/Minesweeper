@@ -13,7 +13,11 @@ public class Minesweeper {
         Board board = chooseDifficulty();
         board.generateMines();
         board.setBoard();
+        playGame(board);
 
+    }
+
+    public static void playGame(Board board) {
         while(playing) {
             System.out.println("Number of mines: " + board.numberOfMines);
             System.out.println("Flags left: " + (board.numberOfMines - board.countNumberOfFlags(board.getBoard())));
@@ -22,25 +26,31 @@ public class Minesweeper {
             System.out.println("Enter reveal/flag/unflag followed by the row-column coordinate (i.e. \"reveal 2-3\")");
 
 
-            String userInputStr = userInput.nextLine();
-            String[] splitInput = userInputStr.split(" ");
+            String[] splitInput = new String[2];
+
             // input validation for command
             boolean validInput = false;
             while(!validInput) {
-                String command = splitInput[0];
-                String[] coords = splitInput[1].split("-");
-                int x = Integer.parseInt(coords[0]);
-                int y = Integer.parseInt(coords[1]);
+                String userInputStr = userInput.nextLine();
+                splitInput = userInputStr.split(" ");
 
                 try {
-                  if (!command.equals("reveal") && !command.equals("flag") && !command.equals("unflag")) {
-                      System.out.println("Please enter 'reveal', 'flag' or 'unflag' for your command");
-                  } else {
-                      validInput = true;
-                  }
-                  validInput =  true;
-                } catch (NumberFormatException e){
-                    System.out.println("Please enter an integer for the row-column coordinates");
+                    System.out.println(userInputStr);
+                    // use regex to check for valid input string
+                    if (!userInputStr.matches("[reveal|flag|unflag]+\\s\\d{1,2}-\\d{1,2}")) {
+                        System.out.println("Incorrect input - please enter reveal/flag/unflag followed by the row-column coordinate (i.e. \"reveal 2-3\")");
+                    } else { // if regex accurate, check row-col values in board range
+                        String[] coordinates = splitInput[1].split("-");
+                        int x = Integer.parseInt(coordinates[0]);
+                        int y = Integer.parseInt(coordinates[1]);
+
+                        if (x < 0 || x > board.numRows || y < 0 || y > board.numCols) {
+                            System.out.println("Invalid row-column coordinates, please make sure they're in range, from 0 to " + board.numRows);
+                            throw new ArrayIndexOutOfBoundsException();
+                        } else {
+                            validInput = true;
+                        }
+                    }
                 } catch (IndexOutOfBoundsException e) {
                     System.out.println("Please enter a valid row and column within range");
                 }

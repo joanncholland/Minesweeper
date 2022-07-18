@@ -9,7 +9,6 @@ public class Board extends Minesweeper {
     int numberOfMines;
     Cell[][] board;
     int totalNumberOfCells;
-    int numberCellsHidden;
     public ArrayList<Location> flagLocations = new ArrayList<>();
     public int numberOfAccurateRevealedCells;
 
@@ -18,7 +17,6 @@ public class Board extends Minesweeper {
         this.numRows = numRows;
         this.numberOfMines = numberOfMines;
         this.totalNumberOfCells = this.numCols*this.numRows;
-        this.numberCellsHidden = 0;
         setNumberOfAccurateRevealedCells((numCols * numRows) - numberOfMines);
     }
 
@@ -50,7 +48,7 @@ public class Board extends Minesweeper {
         return this.board;
     }
 
-    public Cell[][] setBoard() {
+    public void setBoard() {
         board = new Cell[this.numCols][this.numRows];
 
         // fill array with 0s
@@ -60,7 +58,7 @@ public class Board extends Minesweeper {
                 loc.setX(i);
                 loc.setY(j);
 
-                Cell cell = new Cell(loc, this.numCols, this.numRows, this.numberOfMines, false, false, false);;
+                Cell cell = new Cell(loc, this.numCols, this.numRows, this.numberOfMines, false, false, false);
 
                 board[i][j] = cell;
             }
@@ -78,8 +76,6 @@ public class Board extends Minesweeper {
                 board[i][j].setNumberSurroundingMines(countSurroundingMines(i,j, this.board));
             }
         }
-
-        return board;
     }
 
     public void generateMines() {
@@ -96,7 +92,7 @@ public class Board extends Minesweeper {
     }
 
     public int getRandomNumber(int max) {
-        return (int) ((Math.random() * (max - 0)) + 0);
+        return (int) ((Math.random() * (max)) + 0);
     }
 
     public int countSurroundingMines(int x, int y, Cell[][] board) {
@@ -187,16 +183,9 @@ public class Board extends Minesweeper {
                     }
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
-                return ;
+                return;
             }
         }
-    }
-
-    // check if cell is on the board
-    public boolean validCell(int x, int y) {
-        if (x < 0 || y < 0) return false;
-        if(x >= this.numCols || y >= this.numRows) return false;
-        return true;
     }
 
     public static void main(String[] args) {
