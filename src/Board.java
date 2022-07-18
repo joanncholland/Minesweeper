@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Represents the minesweeper board.
@@ -149,10 +147,11 @@ public class Board extends Minesweeper {
 
     /**
      * Generate the mines based on random locations.
+     * Takes note of players first move and generates mines away from first move location.
      */
-    public void generateMines() {
+    public void generateMines(Location firstLocation) {
         mineLocations = new ArrayList<>();
-        // set initial mine locations
+        // while mineLocations doesn't have the specified number of mines, loop
         while(mineLocations.size() < this.numberOfMines) {
             Location loc = new Location();
             // generate random row, column within board limits
@@ -161,10 +160,33 @@ public class Board extends Minesweeper {
             loc.setRow(row);
             loc.setColumn(column);
 
-            if (!mineLocations.contains(loc)) {
+            // get firstLocation surrounding locations
+            ArrayList<Location> firstLocationSurrounding = getSurroundingCellLocations(firstLocation);
+
+            // if mine locations doesn't already contain location
+            // and if loc not in surrounding cell locations, add location
+            if (!mineLocations.contains(loc) && !firstLocationSurrounding.contains(loc)) {
                 mineLocations.add(loc);
             }
         }
+    }
+
+    // get surrounding cell locations
+    public ArrayList<Location> getSurroundingCellLocations(Location location) {
+        ArrayList<Location> surroundingLocations = new ArrayList<>();
+        try {
+            for (int i = location.getRow()-1; i <= location.getRow() + 1; i++) {
+                for (int j = location.getColumn()-1; j <= location.getColumn()+1; j++) {
+                    Location surroundingLocation = new Location();
+                    surroundingLocation.setRow(i);
+                    surroundingLocation.setColumn(j);
+                    surroundingLocations.add(surroundingLocation);
+                }
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+
+        }
+        return surroundingLocations;
     }
 
     /**
@@ -200,9 +222,9 @@ public class Board extends Minesweeper {
     /**
      * Floodfill used if the selected cell has 0 surrounding mines - uses a recursive algorithm.
      * @param location A Location object containing the location of the cell.
-     * @param board The Cell[][] 2d array containing the board.
      */
     public void floodfill(Location location, Cell[][] board) {
+        System.out.println(getBoard());
         if (!board[location.getRow()][location.getColumn()].isRevealed()) {
             int numberSurroundingMines = countSurroundingMines(location.getRow(), location.getColumn(), board);
 

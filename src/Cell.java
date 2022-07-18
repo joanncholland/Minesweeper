@@ -80,8 +80,12 @@ public class Cell extends Board {
      * @param location A Location object specifying the [row, column] location of the cell.
      */
     public void flag(Location location) {
-        this.isFlagged = true;
-        getFlagLocations().add(location);
+        if (!this.isRevealed) {
+            this.isFlagged = true;
+            getFlagLocations().add(location);
+        } else {
+            System.out.println("That cell has been revealed already.");
+        }
     }
 
     /**

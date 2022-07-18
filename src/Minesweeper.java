@@ -2,11 +2,13 @@ import java.util.Scanner;
 
 /**
  * Represents the minesweeper game.
+ * @author Joann Holland
  */
 public class Minesweeper {
 
     private static boolean playing = true;
     private static Scanner userInput = new Scanner(System.in);
+    public static Location firstMove;
 
     public static void main(String[] args) {
 
@@ -16,15 +18,32 @@ public class Minesweeper {
 
     }
 
+    public static void setFirstMove(int row, int col) {
+        Location location = new Location();
+        location.setRow(row);
+        location.setColumn(col);
+        firstMove = location;
+    }
+
     /**
      * Initiates a new game of minesweeper.
      */
     public static void playGame() {
         Board board = chooseDifficulty();
-        board.generateMines();
+
+        System.out.println("Please enter the position of your first move from 0 to " + board.getNumRows() + " (i.e. 3-3)");
+        String firstLocationStr = userInput.nextLine();
+        String[] firstLocationCoordinates = firstLocationStr.split("-");
+
+
+        setFirstMove(Integer.parseInt(firstLocationCoordinates[0]), Integer.parseInt(firstLocationCoordinates[1]));
+        board.generateMines(firstMove);
+        System.out.println(firstMove);
         board.setBoard();
+        board.floodfill(firstMove, board.getBoard());
 
         while(playing) {
+            System.out.println("\n");
             System.out.println("Number of mines: " + board.getNumberOfMines());
             System.out.println("Flags left: " + (board.getNumberOfMines() - board.countNumberOfFlags(board.getBoard())));
             board.printBoard(board.getBoard());
@@ -42,7 +61,7 @@ public class Minesweeper {
                 try {
                     System.out.println(userInputStr);
                     // use regex to check for valid input string
-                    if (!userInputStr.matches("[reveal|flag|unflag]+\\s\\d{1,2}-\\d{1,2}")) {
+                    if (!userInputStr.matches("(reveal|flag|unflag)+\\s\\d{1,2}-\\d{1,2}")) {
                         System.out.println("Incorrect input - please enter reveal/flag/unflag followed by the row-column coordinate (i.e. \"reveal 2-3\")");
                     } else { // if regex accurate, check row-col values in board range
                         String[] coordinates = splitInput[1].split("-");
