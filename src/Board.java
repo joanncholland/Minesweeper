@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents the minesweeper board.
@@ -7,7 +9,7 @@ import java.util.ArrayList;
 public class Board extends Minesweeper {
     private final int numCols;
     private final int numRows;
-    private Location[] mineLocations;
+    private ArrayList<Location> mineLocations;
     private final int numberOfMines;
     private Cell[][] board;
     private final ArrayList<Location> flagLocations = new ArrayList<>();
@@ -149,19 +151,20 @@ public class Board extends Minesweeper {
      * Generate the mines based on random locations.
      */
     public void generateMines() {
-        mineLocations = new Location[this.numberOfMines];
-        for(int i = 0; i < this.numberOfMines; i++) {
+        mineLocations = new ArrayList<>();
+        // set initial mine locations
+        while(mineLocations.size() < this.numberOfMines) {
             Location loc = new Location();
             // generate random row, column within board limits
             int row = getRandomNumber(this.numCols);
             int column = getRandomNumber(this.numRows);
             loc.setRow(row);
             loc.setColumn(column);
-            mineLocations[i] = loc;
-        }
 
-        // handles duplicate mines
-        
+            if (!mineLocations.contains(loc)) {
+                mineLocations.add(loc);
+            }
+        }
     }
 
     /**

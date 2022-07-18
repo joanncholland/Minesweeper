@@ -46,6 +46,15 @@ public class Location {
         this.column = column;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Location) {
+            Location loc = (Location)obj;
+            return this.row == loc.row && this.column == loc.column;
+        }
+        return false;
+    }
+
     /**
      * Overrides the toString method to output the [row, column] coordinates.
      * @return The String containing the row and column coordinates in an array format.
