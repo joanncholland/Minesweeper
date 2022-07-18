@@ -1,30 +1,35 @@
 import java.util.Scanner;
 
+/**
+ * Represents the minesweeper game.
+ */
 public class Minesweeper {
 
-    static boolean playing = true;
-    static Scanner userInput = new Scanner(System.in);
+    private static boolean playing = true;
+    private static Scanner userInput = new Scanner(System.in);
 
     public static void main(String[] args) {
 
-
         System.out.println("Minesweeper");
 
-        Board board = chooseDifficulty();
-        board.generateMines();
-        board.setBoard();
-        playGame(board);
+        playGame();
 
     }
 
-    public static void playGame(Board board) {
+    /**
+     * Initiates a new game of minesweeper.
+     */
+    public static void playGame() {
+        Board board = chooseDifficulty();
+        board.generateMines();
+        board.setBoard();
+
         while(playing) {
-            System.out.println("Number of mines: " + board.numberOfMines);
-            System.out.println("Flags left: " + (board.numberOfMines - board.countNumberOfFlags(board.getBoard())));
+            System.out.println("Number of mines: " + board.getNumberOfMines());
+            System.out.println("Flags left: " + (board.getNumberOfMines() - board.countNumberOfFlags(board.getBoard())));
             board.printBoard(board.getBoard());
 
             System.out.println("Enter reveal/flag/unflag followed by the row-column coordinate (i.e. \"reveal 2-3\")");
-
 
             String[] splitInput = new String[2];
 
@@ -41,11 +46,11 @@ public class Minesweeper {
                         System.out.println("Incorrect input - please enter reveal/flag/unflag followed by the row-column coordinate (i.e. \"reveal 2-3\")");
                     } else { // if regex accurate, check row-col values in board range
                         String[] coordinates = splitInput[1].split("-");
-                        int x = Integer.parseInt(coordinates[0]);
-                        int y = Integer.parseInt(coordinates[1]);
+                        int row = Integer.parseInt(coordinates[0]);
+                        int column = Integer.parseInt(coordinates[1]);
 
-                        if (x < 0 || x > board.numRows || y < 0 || y > board.numCols) {
-                            System.out.println("Invalid row-column coordinates, please make sure they're in range, from 0 to " + board.numRows);
+                        if (row < 0 || row > board.getNumRows() || column < 0 || column > board.getNumCols()) {
+                            System.out.println("Invalid row-column coordinates, please make sure they're in range, from 0 to " + board.getNumRows());
                             throw new ArrayIndexOutOfBoundsException();
                         } else {
                             validInput = true;
@@ -59,29 +64,29 @@ public class Minesweeper {
 
             String command = splitInput[0];
             String[] coords = splitInput[1].split("-");
-            int x = Integer.parseInt(coords[0]);
+            int row = Integer.parseInt(coords[0]);
 
-            int y = Integer.parseInt(coords[1]);
+            int column = Integer.parseInt(coords[1]);
             Location loc = new Location();
-            loc.setX(x);
-            loc.setY(y);
+            loc.setRow(row);
+            loc.setColumn(column);
             switch (command) {
                 case "flag":
-                    board.getBoard()[x][y].flag(loc);
+                    board.getBoard()[row][column].flag(loc);
                     break;
                 case "unflag":
-                    board.getBoard()[x][y].unflag(loc);
+                    board.getBoard()[row][column].unflag(loc);
                     break;
                 case "reveal":
-                    if (board.getBoard()[x][y].isMine) {
+                    if (board.getBoard()[row][column].isMine()) {
                         board.revealAll(board.getBoard());
                         board.printBoard(board.getBoard());
                         System.out.println("You chose a mine - game over!");
                         playing = false;
                         break;
                     } else {
-                        board.getBoard()[x][y].floodfill(loc, board.getBoard());
-                        if (board.countNumberOfRevealedCells(board.getBoard()) == board.numberOfAccurateRevealedCells) {
+                        board.getBoard()[row][column].floodfill(loc, board.getBoard());
+                        if (board.countNumberOfRevealedCells(board.getBoard()) == board.getNumberOfAccurateRevealedCells()) {
                             board.revealAll(board.getBoard());
                             board.printBoard(board.getBoard());
                             System.out.println("Congrats - you won!");
@@ -93,6 +98,15 @@ public class Minesweeper {
         }
     }
 
+    /**
+     * Prompts the player to choose a difficulty level (1-easy,
+     *                                                  2-medium,
+     *                                                  3-hard).
+     *
+     * @return A new board based on the chosen difficulty level (easy: 8x8 with 10 mines,
+     *                                                          medium: 14x14 with 40 mines,
+     *                                                          hard: 20x20 with 99 mines).
+     */
     public static Board chooseDifficulty() {
         // choose difficulty
         int difficulty;

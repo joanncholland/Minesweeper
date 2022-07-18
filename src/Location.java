@@ -1,22 +1,57 @@
+/**
+ * Represents a location or coordinate on the minesweeper board.
+ * @author Joann Holland
+ */
 public class Location {
-    int x;
-    int y;
+    private int row;
+    private int column;
 
+    /**
+     * Creates a new location.
+     */
     public Location() {
-        this.x = x;
-        this.y = y;
+        this.row = row;
+        this.column = column;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    /**
+     * Gets the row number.
+     * @return An integer specifying the row number.
+     */
+    public int getRow() {
+        return row;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    /**
+     * Sets the row number.
+     * @param row An integer specifying the row number.
+     */
+    public void setRow(int row) {
+        this.row = row;
     }
 
+    /**
+     * Gets the column number.
+     * @return An integer specifying the column number.
+     */
+    public int getColumn() {
+        return column;
+    }
+
+    /**
+     * Sets the column number.
+     * @param column An integer specifying the column number.
+     */
+    public void setColumn(int column) {
+        this.column = column;
+    }
+
+    /**
+     * Overrides the toString method to output the [row, column] coordinates.
+     * @return The String containing the row and column coordinates in an array format.
+     */
     @Override
     public String toString() {
-        return "[" + x + ", " + y + "]";
+        return "[" + row + ", " + column + "]";
     }
 }
