@@ -18,6 +18,11 @@ public class Minesweeper {
 
     }
 
+    /**
+     * Sets the user's first move.
+     * @param row An integer for the selected row coordinate.
+     * @param col An integer for the selected column coordinate.
+     */
     public static void setFirstMove(int row, int col) {
         Location location = new Location();
         location.setRow(row);
@@ -31,16 +36,34 @@ public class Minesweeper {
     public static void playGame() {
         Board board = chooseDifficulty();
 
+        boolean validFirstMove = false;
         System.out.println("Please enter the position of your first move from 0 to " + board.getNumRows() + " (i.e. 3-3)");
-        String firstLocationStr = userInput.nextLine();
-        String[] firstLocationCoordinates = firstLocationStr.split("-");
+        while (!validFirstMove) {
 
+            String firstLocationStr = userInput.nextLine();
+            try {
+                if (!firstLocationStr.matches("\\d{1,2}-\\d{1,2}") || firstLocationStr.isEmpty()) {
+                    System.out.println("Please enter a row-column coordinate (e.g. 3-3)");
+                } else {
 
-        setFirstMove(Integer.parseInt(firstLocationCoordinates[0]), Integer.parseInt(firstLocationCoordinates[1]));
-        board.generateMines(firstMove);
-        System.out.println(firstMove);
-        board.setBoard();
-        board.floodfill(firstMove, board.getBoard());
+                    String[] firstLocationCoordinates = firstLocationStr.split("-");
+
+                    if (Integer.parseInt(firstLocationCoordinates[0]) < 0 || Integer.parseInt(firstLocationCoordinates[0]) > board.getNumRows() ||
+                            Integer.parseInt(firstLocationCoordinates[1]) < 0 || Integer.parseInt(firstLocationCoordinates[1]) > board.getNumCols()) {
+                        throw new ArrayIndexOutOfBoundsException();
+                    } else {
+                        validFirstMove = true;
+
+                        setFirstMove(Integer.parseInt(firstLocationCoordinates[0]), Integer.parseInt(firstLocationCoordinates[1]));
+                        board.generateMines(firstMove);
+                        board.setBoard();
+                        board.floodfill(firstMove, board.getBoard());
+                    }
+                }
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Please enter a valid row and column within range");
+            }
+        }
 
         while(playing) {
             System.out.println("\n");
@@ -59,9 +82,8 @@ public class Minesweeper {
                 splitInput = userInputStr.split(" ");
 
                 try {
-                    System.out.println(userInputStr);
                     // use regex to check for valid input string
-                    if (!userInputStr.matches("(reveal|flag|unflag)+\\s\\d{1,2}-\\d{1,2}")) {
+                    if (!userInputStr.matches("(reveal|flag|unflag)\\s\\d{1,2}-\\d{1,2}") || userInputStr.isEmpty()) {
                         System.out.println("Incorrect input - please enter reveal/flag/unflag followed by the row-column coordinate (i.e. \"reveal 2-3\")");
                     } else { // if regex accurate, check row-col values in board range
                         String[] coordinates = splitInput[1].split("-");
@@ -69,14 +91,13 @@ public class Minesweeper {
                         int column = Integer.parseInt(coordinates[1]);
 
                         if (row < 0 || row > board.getNumRows() || column < 0 || column > board.getNumCols()) {
-                            System.out.println("Invalid row-column coordinates, please make sure they're in range, from 0 to " + board.getNumRows());
                             throw new ArrayIndexOutOfBoundsException();
                         } else {
                             validInput = true;
                         }
                     }
                 } catch (IndexOutOfBoundsException e) {
-                    System.out.println("Please enter a valid row and column within range");
+                    System.out.println("Invalid row-column coordinates, please make sure they're in range, from 0 to " + board.getNumRows());
                 }
 
             }
