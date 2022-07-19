@@ -233,32 +233,57 @@ public class Board extends Minesweeper {
                     board[location.getRow()][location.getColumn()].setRevealed(true);
                 } else {
                     board[location.getRow()][location.getColumn()].setRevealed(true);
-                    if (location.getRow() > 0) {
+                    if (location.getRow() > 0) { // top
                         Location loc1 = new Location();
                         loc1.setRow(location.getRow()-1);
                         loc1.setColumn(location.getColumn());
                         floodfill(loc1, board);
                     }
-                    if (location.getRow() < numRows) {
+                    if (location.getRow() < numRows-1) { // bottom
                         Location loc2 = new Location();
                         loc2.setRow(location.getRow()+1);
                         loc2.setColumn(location.getColumn());
                         floodfill(loc2, board);
                     }
-                    if (location.getColumn() > 0) {
+                    if (location.getColumn() > 0) { // left
                         Location loc3 = new Location();
                         loc3.setRow(location.getRow());
                         loc3.setColumn(location.getColumn()-1);
                         floodfill(loc3, board);
                     }
-                    if (location.getColumn() < numCols) {
+                    if (location.getColumn() < numCols-1) { // right
                         Location loc4 = new Location();
                         loc4.setRow(location.getRow());
                         loc4.setColumn(location.getColumn()+1);
                         floodfill(loc4, board);
                     }
+                    if (location.getColumn() > 0 && location.getRow() > 0) { // top left
+                        Location loc5 = new Location();
+                        loc5.setRow(location.getRow()-1);
+                        loc5.setColumn(location.getColumn()-1);
+                        floodfill(loc5, board);
+                    }
+                    if (location.getColumn() < numCols-1 && location.getRow() > 0) { // top right
+                        Location loc6 = new Location();
+                        loc6.setRow(location.getRow()-1);
+                        loc6.setColumn(location.getColumn()+1);
+                        floodfill(loc6, board);
+                    }
+                    if (location.getColumn() > 0 && location.getRow() < numRows-1) { // bottom left
+                        Location loc7 = new Location();
+                        loc7.setRow(location.getRow()+1);
+                        loc7.setColumn(location.getColumn()-1);
+                        floodfill(loc7, board);
+                    }
+                    if (location.getColumn() < numCols-1 && location.getRow() < numRows-1) { // bottom right
+                        Location loc8 = new Location();
+                        loc8.setRow(location.getRow()+1);
+                        loc8.setColumn(location.getColumn()+1);
+                        floodfill(loc8, board);
+                    }
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
+                e.printStackTrace();
                 return;
             }
         }
