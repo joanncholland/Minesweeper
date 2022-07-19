@@ -12,7 +12,7 @@ public class Minesweeper {
 
     public static void main(String[] args) {
 
-        System.out.println("Minesweeper");
+        System.out.println("Welcome to Minesweeper!\n");
 
         playGame();
 
@@ -37,14 +37,14 @@ public class Minesweeper {
         Board board = chooseDifficulty();
 
         boolean validFirstMove = false;
-        System.out.println("Please enter the position of your first move from 0 to " + board.getNumRows() + " (i.e. 3-3)");
+        System.out.println("\nPlease enter the row-column position of your first move from 0 to " + board.getNumRows() + " (i.e. 3-3)");
         while (!validFirstMove) {
 
             // validations for first move location
             String firstLocationStr = userInput.nextLine();
             try {
                 if (!firstLocationStr.matches("\\d{1,2}-\\d{1,2}") || firstLocationStr.isEmpty()) {
-                    System.out.println("Please enter a row-column coordinate (e.g. 3-3)");
+                    System.out.println("Invalid input - please enter a valid row-column coordinate (e.g. 3-3)");
                 } else {
 
                     String[] firstLocationCoordinates = firstLocationStr.split("-");
@@ -62,17 +62,23 @@ public class Minesweeper {
                     }
                 }
             } catch (IndexOutOfBoundsException e) {
-                System.out.println("Please enter a valid row and column within range");
+                System.out.println("Invalid row-column coordinates - please make sure they're in range, from 0 to " + board.getNumRows());
             }
         }
 
+        // print out command instructions so the user knows what to enter
+        System.out.println("\nCommand instructions:");
+        System.out.println("reveal 3-3\treveals the cell at row-column location 3-3");
+        System.out.println("flag 3-3\tflags the cell at row-column location 3-3");
+        System.out.println("unflag 3-3\tflags the cell at row-column location 3-3");
+
         while(playing) {
-            System.out.println("\n");
+            System.out.println();
             System.out.println("Number of mines: " + board.getNumberOfMines());
             System.out.println("Flags left: " + (board.getNumberOfMines() - board.countNumberOfFlags(board.getBoard())));
             board.printBoard(board.getBoard());
 
-            System.out.println("Enter reveal/flag/unflag followed by the row-column coordinate (i.e. \"reveal 2-3\")");
+            System.out.println("Enter reveal/flag/unflag followed by the row-column coordinate (i.e. reveal 2-3)");
 
             String[] splitInput = new String[2];
 
@@ -85,7 +91,7 @@ public class Minesweeper {
                 try {
                     // use regex to check for valid input string
                     if (!userInputStr.matches("(reveal|flag|unflag)\\s\\d{1,2}-\\d{1,2}") || userInputStr.isEmpty()) {
-                        System.out.println("Incorrect input - please enter reveal/flag/unflag followed by the row-column coordinate (i.e. \"reveal 2-3\")");
+                        System.out.println("Invalid input - please enter reveal/flag/unflag followed by the row-column coordinate (i.e. reveal 2-3)");
                     } else { // if regex accurate, check row-col values in board range
                         String[] coordinates = splitInput[1].split("-");
                         int row = Integer.parseInt(coordinates[0]);
@@ -98,7 +104,7 @@ public class Minesweeper {
                         }
                     }
                 } catch (IndexOutOfBoundsException e) {
-                    System.out.println("Invalid row-column coordinates, please make sure they're in range, from 0 to " + board.getNumRows());
+                    System.out.println("Invalid row-column coordinates - please make sure they're in range, from 0 to " + board.getNumRows());
                 }
 
             }
@@ -129,6 +135,7 @@ public class Minesweeper {
                         board.getBoard()[row][column].floodfill(loc, board.getBoard());
                         if (board.countNumberOfRevealedCells(board.getBoard()) == board.getNumberOfAccurateRevealedCells()) {
                             board.revealAll(board.getBoard());
+                            System.out.println("\nSee the revealed board below:");
                             board.printBoard(board.getBoard());
                             System.out.println("Congrats - you won!");
                             playing = false;
@@ -158,9 +165,9 @@ public class Minesweeper {
         while(!validDifficulty) {
             try {
                 System.out.println("Please enter your difficulty level:");
-                System.out.println("1 - easy");
-                System.out.println("2 - medium");
-                System.out.println("3 - hard");
+                System.out.println("1 - easy (8x8 board with 10 mines)");
+                System.out.println("2 - medium (14x14 board with 40 mines)");
+                System.out.println("3 - hard (20x20 board with 99 mines)");
                 difficulty = Integer.parseInt(userInput.nextLine());
                 if (difficulty != 1 && difficulty != 2 && difficulty != 3) {
                     System.out.println("Please enter 1, 2 or 3.");
