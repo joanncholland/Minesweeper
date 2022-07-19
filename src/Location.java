@@ -1,5 +1,5 @@
 /**
- * Represents a location or coordinate on the minesweeper board.
+ * Represents a location or coordinate of a cell on the minesweeper board.
  * @author Joann Holland
  */
 public class Location {

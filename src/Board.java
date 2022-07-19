@@ -146,7 +146,8 @@ public class Board extends Minesweeper {
     }
 
     /**
-     * Generate the mines based on random locations.
+     * Generate the mines based on random locations - makes sure there are no duplicates and
+     * that on the player's first move no mines are generated surrounding the player's first cell.
      * Takes note of players first move and generates mines away from first move location.
      */
     public void generateMines(Location firstLocation) {
@@ -224,7 +225,6 @@ public class Board extends Minesweeper {
      * @param location A Location object containing the location of the cell.
      */
     public void floodfill(Location location, Cell[][] board) {
-        System.out.println(getBoard());
         if (!board[location.getRow()][location.getColumn()].isRevealed()) {
             int numberSurroundingMines = countSurroundingMines(location.getRow(), location.getColumn(), board);
 

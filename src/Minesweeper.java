@@ -40,6 +40,7 @@ public class Minesweeper {
         System.out.println("Please enter the position of your first move from 0 to " + board.getNumRows() + " (i.e. 3-3)");
         while (!validFirstMove) {
 
+            // validations for first move location
             String firstLocationStr = userInput.nextLine();
             try {
                 if (!firstLocationStr.matches("\\d{1,2}-\\d{1,2}") || firstLocationStr.isEmpty()) {
