@@ -84,7 +84,7 @@ public class Cell extends Board {
             this.isFlagged = true;
             getFlagLocations().add(location);
         } else {
-            System.out.println("That cell has been revealed already.");
+            System.out.println("That cell has already been revealed.");
         }
     }
 
@@ -93,8 +93,12 @@ public class Cell extends Board {
      * @param location A Location object specifying the [row, column] location of the cell.
      */
     public void unflag(Location location) {
-        this.isFlagged = false;
-        getFlagLocations().remove(location);
+        if(!this.isRevealed) {
+            this.isFlagged = false;
+            getFlagLocations().remove(location);
+        } else {
+            System.out.println("That cell has already been revealed");
+        }
     }
 
     /**
