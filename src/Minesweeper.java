@@ -49,8 +49,8 @@ public class Minesweeper {
 
                     String[] firstLocationCoordinates = firstLocationStr.split("-");
 
-                    if (Integer.parseInt(firstLocationCoordinates[0]) < 0 || Integer.parseInt(firstLocationCoordinates[0]) > board.getNumRows() ||
-                            Integer.parseInt(firstLocationCoordinates[1]) < 0 || Integer.parseInt(firstLocationCoordinates[1]) > board.getNumCols()) {
+                    if (Integer.parseInt(firstLocationCoordinates[0]) < 0 || Integer.parseInt(firstLocationCoordinates[0]) >= board.getNumRows() ||
+                            Integer.parseInt(firstLocationCoordinates[1]) < 0 || Integer.parseInt(firstLocationCoordinates[1]) >= board.getNumCols()) {
                         throw new ArrayIndexOutOfBoundsException();
                     } else {
                         validFirstMove = true;
@@ -70,7 +70,7 @@ public class Minesweeper {
         System.out.println("\nCommand instructions:");
         System.out.println("reveal 3-3\treveals the cell at row-column location 3-3");
         System.out.println("flag 3-3\tflags the cell at row-column location 3-3");
-        System.out.println("unflag 3-3\tflags the cell at row-column location 3-3");
+        System.out.println("unflag 3-3\tunflags the cell at row-column location 3-3");
 
         while(playing) {
             System.out.println();
@@ -97,7 +97,7 @@ public class Minesweeper {
                         int row = Integer.parseInt(coordinates[0]);
                         int column = Integer.parseInt(coordinates[1]);
 
-                        if (row < 0 || row > board.getNumRows() || column < 0 || column > board.getNumCols()) {
+                        if (row < 0 || row >= board.getNumRows() || column < 0 || column >= board.getNumCols()) {
                             throw new ArrayIndexOutOfBoundsException();
                         } else {
                             validInput = true;

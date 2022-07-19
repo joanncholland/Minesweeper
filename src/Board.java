@@ -313,24 +313,23 @@ public class Board extends Minesweeper {
         for (int i = 0; i < numCols; i++) {
             System.out.print(i + "\t");
         }
-        System.out.println();
-        System.out.print("  ");
-        for (int i = 0; i < numCols; i++) {
-            System.out.print("____");
-        }
+        System.out.print("    ");
+
         System.out.print("\n");
         for (int i = 0; i < numCols; i++) {
-            System.out.print(i + " |");
+            if (i >= 10) {
+                System.out.print(i + "");
+            } else {
+                System.out.print(i + " ");
+            }
             for (int j = 0; j < numRows; j++) {
                 System.out.print("\t" + board[i][j]);
             }
-            System.out.print(" | \n");
+            System.out.print(" \n");
         }
 
-        System.out.print("  ");
-        for (int i = 0; i < numCols; i++) {
-            System.out.print("----");
-        }
+        System.out.print("   ");
+
         System.out.println();
     }
 }
